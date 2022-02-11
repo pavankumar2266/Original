@@ -1,3 +1,4 @@
+
 #include <conio.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +26,6 @@ void gotoxy(int x, int y)
 	SetConsoleCursorPosition(
 		GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
-
 
 struct pass {
 	char username[50];
@@ -59,13 +59,12 @@ int main()
 
 	gotoxy(20, 3);
 
+
 	printf("WELCOME TO BANK ACCOUNT SYSTEM\n\n");
 	gotoxy(18, 5);
 
 	printf("**********************************");
 	gotoxy(25, 7);
-
-	printf("pradeep");
 
 	gotoxy(20, 10);
 	printf("1.... CREATE A BANK ACCOUNT");
@@ -99,6 +98,7 @@ int main()
 	}
 }
 
+
 void account(void)
 {
 	char password[20];
@@ -110,7 +110,7 @@ void account(void)
 
 	struct userpass u2;
 
-
+	
 	fp = fopen("username.txt", "ab");
 
 
@@ -154,7 +154,7 @@ void account(void)
 
 	printf("\n\nPASSWORD..");
 
-
+	
 	for (i = 0; i < 50; i++) {
 		ch = getch();
 		if (ch != 13) {
@@ -166,14 +166,16 @@ void account(void)
 			break;
 	}
 
-	
+
 	fwrite(&u1, sizeof(u1),
 		1, fp);
 
-
+	
 	fclose(fp);
 
-
+	// Calling another function
+	// after successful creation
+	// of account
 	accountcreated();
 }
 
@@ -199,6 +201,7 @@ void accountcreated(void)
 	getch();
 	login();
 }
+
 
 void login(void)
 {
@@ -228,6 +231,7 @@ void login(void)
 	gotoxy(35, 10);
 	printf("==== LOG IN ====");
 
+
 	gotoxy(35, 12);
 	printf("USERNAME.. ");
 	scanf("%s", &username);
@@ -235,6 +239,7 @@ void login(void)
 	gotoxy(35, 14);
 	printf("PASSWORD..");
 
+	
 	for (i = 0; i < 50; i++) {
 		ch = getch();
 		if (ch != 13) {
@@ -247,6 +252,7 @@ void login(void)
 			break;
 	}
 
+
 	while (fread(&u1, sizeof(u1),
 				1, fp)) {
 		if (strcmp(username,
@@ -256,6 +262,7 @@ void login(void)
 			display(username);
 		}
 	}
+
 
 	fclose(fp);
 }
@@ -393,7 +400,7 @@ void transfermoney(void)
 	char usernamep[20];
 	system("cls");
 
-
+	
 	fp = fopen("username.txt", "rb");
 
 
@@ -412,7 +419,6 @@ void transfermoney(void)
 	printf(" TO (username of person)..");
 	scanf("%s", &usernamep);
 
-
 	while (fread(&u1, sizeof(u1),
 				1, fp))
 
@@ -428,11 +434,10 @@ void transfermoney(void)
 	}
 	gotoxy(33, 16);
 
-
 	printf("ENTER THE AMOUNT TO BE TRANSFERED..");
 	scanf("%d", &m1.money1);
 
-
+	
 	fwrite(&m1, sizeof(m1),
 		1, fm);
 
@@ -462,13 +467,55 @@ void transfermoney(void)
 	printf("AMOUNT SUCCESSFULLY TRANSFERED....");
 	getch();
 
+	
 	fclose(fp);
 	fclose(fm);
 
 	display(usernamet);
 }
 
+void checkbalance(char username2[])
+{
+	system("cls");
+	FILE* fm;
+	struct money m1;
+	char ch;
+	int i = 1, summoney = 0;
 
+	fm = fopen("mon.txt", "rb");
+
+	int k = 5, l = 10;
+	int m = 30, n = 10;
+	int u = 60, v = 10;
+
+	gotoxy(30, 2);
+	printf("==== BALANCE DASHBOARD ====");
+	gotoxy(30, 3);
+	printf("***************************");
+	gotoxy(k, l);
+	printf("S no.");
+	gotoxy(m, n);
+	printf("TRANSACTION ID");
+	gotoxy(u, v);
+	printf("AMOUNT");
+
+	
+	while (fread(&m1, sizeof(m1),
+				1, fm)) {
+		if (strcmp(username2,
+				m1.usernameto)
+			== 0) {
+			gotoxy(k, ++l);
+			printf("%d", i);
+			i++;
+			gotoxy(m, ++n);
+			printf("%s", m1.userpersonfrom);
+
+			gotoxy(u, ++v);
+			printf("%d", m1.money1);
+		
+			summoney = summoney + m1.money1;
+		}
 	}
 
 	gotoxy(80, 10);
@@ -479,9 +526,11 @@ void transfermoney(void)
 
 	getch();
 
+
 	fclose(fm);
 	display(username2);
 }
+
 
 void logout(void)
 {
